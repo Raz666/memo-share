@@ -26,7 +26,7 @@ export type UseSlideshowResult = {
   setSpeedMode: (mode: SpeedMode) => void;
 };
 
-const DEFAULT_SPEED: SpeedMode = 'fast';
+const DEFAULT_SPEED: SpeedMode = 'faster';
 
 const clampIndex = (value: number, length: number) => {
   if (length <= 0) return 0;
@@ -58,7 +58,7 @@ export default function useSlideshow(items: MemoryItem[]): UseSlideshowResult {
       return;
     }
     setIndex((current) =>
-      current >= itemsLength ? itemsLength - 1 : Math.max(current, 0)
+      current >= itemsLength ? itemsLength - 1 : Math.max(current, 0),
     );
   }, [itemsLength]);
 

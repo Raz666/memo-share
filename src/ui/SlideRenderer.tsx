@@ -14,7 +14,10 @@ type SlideRendererProps = {
 const FALLBACK_SOURCE = require('../../assets/icon.png');
 const TRANSITION_MS = 450;
 
-export default function SlideRenderer({ item, durationMs }: SlideRendererProps) {
+export default function SlideRenderer({
+  item,
+  durationMs,
+}: SlideRendererProps) {
   const [currentItem, setCurrentItem] = useState(item);
   const [prevItem, setPrevItem] = useState<MemoryItem | null>(null);
   const transition = useRef(new Animated.Value(1)).current;
@@ -28,7 +31,7 @@ export default function SlideRenderer({ item, durationMs }: SlideRendererProps) 
         inputRange: [0, 1],
         outputRange: [1, 0],
       }),
-    [transition]
+    [transition],
   );
 
   useEffect(() => {
