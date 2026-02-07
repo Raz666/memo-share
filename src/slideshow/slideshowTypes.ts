@@ -1,5 +1,13 @@
 export type SpeedMode = 'fast' | 'slow' | 'slower';
 
+export const SPEED_DURATIONS_MS = {
+  fast: { photo: 10_000, chapter: 4_000 },
+  slow: { photo: 60_000, chapter: 6_000 },
+  slower: { photo: 600_000, chapter: 6_000 },
+} as const;
+
+export const getSpeedDurations = (speed: SpeedMode) => SPEED_DURATIONS_MS[speed];
+
 export type PhotoItem = {
   type: 'photo';
   id: string;

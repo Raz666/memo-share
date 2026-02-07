@@ -1,19 +1,27 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
+import { MEMORIES } from '../data/memories';
+import useSlideshow from '../slideshow/useSlideshow';
 import { theme } from '../theme/theme';
+import SlideRenderer from './SlideRenderer';
 
-type SlideshowScreenProps = {
-  onExit?: () => void;
-};
+export default function SlideshowScreen() {
+  const { currentItem, currentDurationMs, hudVisible, setHudVisible } =
+    useSlideshow(MEMORIES);
+  const slideItem = currentItem ?? MEMORIES[0];
 
-export default function SlideshowScreen({ onExit }: SlideshowScreenProps) {
+  const handleToggleHud = () => {
+    setHudVisible(!hudVisible);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SlideshowScreen</Text>
-      <Text style={styles.subtitle}>Placeholder slideshow view</Text>
-      <Pressable onPress={onExit} style={styles.button}>
-        <Text style={styles.buttonText}>Back to cover</Text>
+      <Pressable style={styles.pressable} onPress={handleToggleHud}>
+        {slideItem ? (
+          <SlideRenderer item={slideItem} durationMs={currentDurationMs} />
+        ) : null}
+        {hudVisible ? <View style={styles.hudOverlay} /> : null}
       </Pressable>
     </View>
   );
@@ -25,29 +33,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.colors.background,
-    padding: theme.spacing.xl,
   },
-  title: {
-    color: theme.colors.text,
-    fontSize: theme.typography.size.lg,
-    fontWeight: theme.typography.weight.bold,
+  pressable: {
+    flex: 1,
+    alignSelf: 'stretch',
   },
-  subtitle: {
-    color: theme.colors.textMuted,
-    marginTop: theme.spacing.sm,
-    fontSize: theme.typography.size.md,
-  },
-  button: {
-    marginTop: theme.spacing.xl,
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.radii.pill,
+  hudOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
     borderWidth: 1,
-    borderColor: theme.colors.accent,
-  },
-  buttonText: {
-    color: theme.colors.text,
-    fontSize: theme.typography.size.sm,
-    fontWeight: theme.typography.weight.medium,
+    borderColor: 'rgba(255, 255, 255, 0.12)',
   },
 });
