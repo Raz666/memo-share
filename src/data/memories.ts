@@ -31,6 +31,7 @@ export const MEMORIES: MemoryItem[] = [
     sourceKey: '003',
     caption: 'Coffee stop',
     date: '2024-04-10',
+    details: 'The coffe shop!',
   },
   {
     type: 'chapter',
@@ -45,6 +46,7 @@ export const MEMORIES: MemoryItem[] = [
     sourceKey: '001',
     caption: 'Beach day',
     date: '2024-06-21',
+    details: 'Yay!',
   },
   {
     type: 'photo',
