@@ -56,8 +56,39 @@ export const typography = {
   },
 };
 
+export type FrameSpec = {
+  borderColor: string;
+  accentColor: string;
+  glowOpacity: number;
+  cornerStyle: 'sharp' | 'rounded';
+  valentineAccents?: boolean;
+};
+
+export const frames: Record<string, FrameSpec> = {
+  default: {
+    borderColor: 'rgba(255, 45, 45, 0.45)',
+    accentColor: '#ff2d2d',
+    glowOpacity: 0.2,
+    cornerStyle: 'rounded',
+  },
+  'chapter-1': {
+    borderColor: 'rgba(255, 45, 45, 0.6)',
+    accentColor: '#ff3b3b',
+    glowOpacity: 0.3,
+    cornerStyle: 'rounded',
+    valentineAccents: true,
+  },
+  'chapter-2': {
+    borderColor: 'rgba(255, 45, 45, 0.35)',
+    accentColor: '#ff2d2d',
+    glowOpacity: 0.15,
+    cornerStyle: 'sharp',
+  },
+};
+
 export const theme = {
   colors,
+  frames,
   spacing,
   radii,
   typography,

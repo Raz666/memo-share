@@ -18,7 +18,6 @@ export type PhotoItem = {
   caption?: string;
   date?: string;
   details?: string;
-  frameKey?: string;
 };
 
 export type ChapterItem = {

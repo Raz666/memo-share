@@ -2,18 +2,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 
-import type { MemoryItem } from '../slideshow/slideshowTypes';
+import type { ChapterItem, MemoryItem } from '../slideshow/slideshowTypes';
 import { PHOTO_SOURCES, type PhotoKey } from '../data/photos';
 import { theme } from '../theme/theme';
+import FrameOverlay from './FrameOverlay';
+import { resolveFrameKeyForItem } from '../slideshow/frameResolver';
 
 type SlideRendererProps = {
   item: MemoryItem;
+  chapterMap: Record<string, ChapterItem>;
 };
 
 const FALLBACK_SOURCE = require('../../assets/icon.png');
 const TRANSITION_MS = 450;
 
-export default function SlideRenderer({ item }: SlideRendererProps) {
+export default function SlideRenderer({ item, chapterMap }: SlideRendererProps) {
   const [slotAItem, setSlotAItem] = useState(item);
   const [slotBItem, setSlotBItem] = useState<MemoryItem | null>(null);
   const activeSlotRef = useRef<'A' | 'B'>('A');
@@ -69,14 +72,18 @@ export default function SlideRenderer({ item }: SlideRendererProps) {
         renderToHardwareTextureAndroid
         needsOffscreenAlphaCompositing
       >
-        {slotAItem ? <SlideContent item={slotAItem} /> : null}
+        {slotAItem ? (
+          <SlideContent item={slotAItem} chapterMap={chapterMap} />
+        ) : null}
       </Animated.View>
       <Animated.View
         style={[styles.layer, { opacity: opacityB }]}
         renderToHardwareTextureAndroid
         needsOffscreenAlphaCompositing
       >
-        {slotBItem ? <SlideContent item={slotBItem} /> : null}
+        {slotBItem ? (
+          <SlideContent item={slotBItem} chapterMap={chapterMap} />
+        ) : null}
       </Animated.View>
     </View>
   );
@@ -84,9 +91,11 @@ export default function SlideRenderer({ item }: SlideRendererProps) {
 
 type SlideContentProps = {
   item: MemoryItem;
+  chapterMap: Record<string, ChapterItem>;
 };
 
-function SlideContent({ item }: SlideContentProps) {
+function SlideContent({ item, chapterMap }: SlideContentProps) {
+  const frameKey = resolveFrameKeyForItem(item, chapterMap);
   if (item.type === 'chapter') {
     return (
       <View style={styles.container}>
@@ -97,6 +106,7 @@ function SlideContent({ item }: SlideContentProps) {
             <Text style={styles.chapterSubtitle}>{item.subtitle}</Text>
           ) : null}
         </View>
+        <FrameOverlay frameKey={frameKey} />
       </View>
     );
   }
@@ -124,6 +134,7 @@ function SlideContent({ item }: SlideContentProps) {
           transition={0}
         />
       </View>
+      <FrameOverlay frameKey={frameKey} />
       {(item.caption || item.date) && (
         <View style={styles.photoMeta}>
           {item.caption ? (
