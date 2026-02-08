@@ -48,7 +48,6 @@ Chapter supports: `title`, `subtitle?`, `frameKey?`
 
 - Photo slide: blurred/dimmed background fill + foreground `contain`.
 - Crossfade transitions between slides.
-- Subtle Ken Burns zoom on photos (very restrained).
 - Chapter slide: centered card using card color + neon accents.
 - Progress dots are calculated per chapter based on **photos only**.
 
@@ -77,7 +76,7 @@ useSlideshow.ts # timer/index/pause/speed logic, chapter dots helpers
 ui/
 CoverScreen.tsx
 SlideshowScreen.tsx
-SlideRenderer.tsx # crossfade + Ken Burns + chapter rendering
+SlideRenderer.tsx # crossfade + chapter rendering
 FrameOverlay.tsx # frame per frameKey
 HudOverlay.tsx # full-screen HUD + dropdown
 InfoBubble.tsx # 20% persistent bubble when details exist
@@ -94,6 +93,7 @@ App.tsx
 - Keep layout constants centralized in theme or a small constants section.
 - Avoid fragile dynamic requires — generate a stable mapping in `photos.ts`.
 - Keep components small and testable; avoid deeply nested logic in screens.
+- When generating or editing code, format it to match the project's Prettier rules (per `.prettierrc.json`) so files stay formatted without a separate formatting pass.
 
 ## Deliverable definition
 

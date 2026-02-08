@@ -100,7 +100,7 @@ export default function useSlideshow(items: MemoryItem[]): UseSlideshowResult {
         timerRef.current = null;
       }
     };
-  }, [itemsLength, effectivePaused, currentDurationMs, navTick]);
+  }, [itemsLength, effectivePaused, currentDurationMs, navTick, index]);
 
   const chapterPhotoIds = useMemo(() => {
     const map: Record<string, string[]> = {};

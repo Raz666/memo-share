@@ -7,8 +7,7 @@ import { theme } from '../theme/theme';
 import SlideRenderer from './SlideRenderer';
 
 export default function SlideshowScreen() {
-  const { currentItem, currentDurationMs, hudVisible, setHudVisible } =
-    useSlideshow(MEMORIES);
+  const { currentItem, hudVisible, setHudVisible } = useSlideshow(MEMORIES);
   const slideItem = currentItem ?? MEMORIES[0];
 
   const handleToggleHud = () => {
@@ -18,9 +17,7 @@ export default function SlideshowScreen() {
   return (
     <View style={styles.container}>
       <Pressable style={styles.pressable} onPress={handleToggleHud}>
-        {slideItem ? (
-          <SlideRenderer item={slideItem} durationMs={currentDurationMs} />
-        ) : null}
+        {slideItem ? <SlideRenderer item={slideItem} /> : null}
         {hudVisible ? <View style={styles.hudOverlay} /> : null}
       </Pressable>
     </View>
