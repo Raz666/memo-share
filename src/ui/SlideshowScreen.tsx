@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import type { GestureResponderEvent } from 'react-native';
 
@@ -8,10 +8,22 @@ import useSlideshow from '../slideshow/useSlideshow';
 import { theme } from '../theme/theme';
 import InfoBubble from './InfoBubble';
 import InfoModal from './InfoModal';
+import HudOverlay from './HudOverlay';
 import SlideRenderer from './SlideRenderer';
 
 export default function SlideshowScreen() {
-  const { currentItem, hudVisible, setHudVisible } = useSlideshow(MEMORIES);
+  const {
+    currentChapterProgress,
+    currentItem,
+    hudVisible,
+    next,
+    pausedByUser,
+    prev,
+    setHudVisible,
+    setSpeedMode,
+    speedMode,
+    toggleUserPaused,
+  } = useSlideshow(MEMORIES);
   const slideItem = currentItem ?? MEMORIES[0];
   const [infoVisible, setInfoVisible] = useState(false);
   const chapterMap = useMemo(() => {
@@ -48,6 +60,30 @@ export default function SlideshowScreen() {
     setInfoVisible(true);
   };
 
+  const playHideRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prevPausedRef = useRef(pausedByUser);
+
+  useEffect(() => {
+    if (playHideRef.current) {
+      clearTimeout(playHideRef.current);
+      playHideRef.current = null;
+    }
+
+    if (hudVisible && prevPausedRef.current && !pausedByUser) {
+      playHideRef.current = setTimeout(() => {
+        setHudVisible(false);
+      }, 500);
+    }
+
+    prevPausedRef.current = pausedByUser;
+    return () => {
+      if (playHideRef.current) {
+        clearTimeout(playHideRef.current);
+        playHideRef.current = null;
+      }
+    };
+  }, [hudVisible, pausedByUser, setHudVisible]);
+
   const detailsText =
     slideItem?.type === 'photo' ? slideItem.details ?? '' : '';
   const bubbleVisible = Boolean(
@@ -60,15 +96,23 @@ export default function SlideshowScreen() {
         {slideItem ? (
           <SlideRenderer item={slideItem} chapterMap={chapterMap} />
         ) : null}
-        <InfoBubble
-          visible={bubbleVisible}
-          hudVisible={hudVisible}
-          onPress={handleInfoPress}
-        />
-        {hudVisible ? (
-          <View style={styles.hudOverlay} pointerEvents="none" />
-        ) : null}
       </Pressable>
+      <HudOverlay
+        visible={hudVisible}
+        pausedByUser={pausedByUser}
+        speedMode={speedMode}
+        onHide={handleCloseInfo}
+        onPrev={prev}
+        onNext={next}
+        onTogglePause={toggleUserPaused}
+        onSpeedChange={setSpeedMode}
+        progress={currentChapterProgress}
+      />
+      <InfoBubble
+        visible={bubbleVisible}
+        hudVisible={hudVisible}
+        onPress={handleInfoPress}
+      />
       <InfoModal
         visible={infoVisible}
         details={detailsText}
@@ -88,11 +132,5 @@ const styles = StyleSheet.create({
   pressable: {
     flex: 1,
     alignSelf: 'stretch',
-  },
-  hudOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 255, 255, 0.06)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.12)',
   },
 });
