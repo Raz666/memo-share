@@ -112,12 +112,21 @@ function SlideContent({ item, chapterMap }: SlideContentProps) {
   }
 
   const photoSource =
-    PHOTO_SOURCES[item.sourceKey as PhotoKey] ?? FALLBACK_SOURCE;
+    PHOTO_SOURCES[item.sourceKey as PhotoKey];
 
   return (
     <View style={styles.container}>
+      {!photoSource ? (
+        <View style={styles.missingCard}>
+          <Text style={styles.missingTitle}>Photo missing</Text>
+          <Text style={styles.missingText}>
+            Check PHOTO_SOURCES for key: {item.sourceKey}
+          </Text>
+        </View>
+      ) : (
+        <>
       <Image
-        source={photoSource}
+        source={photoSource ?? FALLBACK_SOURCE}
         style={styles.photoBackground}
         contentFit="cover"
         blurRadius={28}
@@ -127,7 +136,7 @@ function SlideContent({ item, chapterMap }: SlideContentProps) {
       <View style={styles.photoDim} />
       <View style={styles.photoForegroundWrap}>
         <Image
-          source={photoSource}
+          source={photoSource ?? FALLBACK_SOURCE}
           style={styles.photoForeground}
           contentFit="contain"
           cachePolicy="memory-disk"
@@ -142,6 +151,8 @@ function SlideContent({ item, chapterMap }: SlideContentProps) {
           ) : null}
           {item.date ? <Text style={styles.photoDate}>{item.date}</Text> : null}
         </View>
+      )}
+        </>
       )}
     </View>
   );
@@ -206,8 +217,8 @@ const styles = StyleSheet.create({
   photoMeta: {
     position: 'absolute',
     left: theme.spacing.xl,
-    bottom: theme.spacing.xl,
-    maxWidth: '70%',
+    bottom: theme.spacing.xxl,
+    maxWidth: '80%',
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     borderRadius: theme.radii.md,
@@ -222,5 +233,26 @@ const styles = StyleSheet.create({
     color: theme.colors.textMuted,
     marginTop: 2,
     fontSize: theme.typography.size.sm,
+  },
+  missingCard: {
+    backgroundColor: theme.colors.card,
+    paddingHorizontal: theme.spacing.xxl,
+    paddingVertical: theme.spacing.xl,
+    borderRadius: theme.radii.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 45, 45, 0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  missingTitle: {
+    color: theme.colors.text,
+    fontSize: theme.typography.size.md,
+    fontWeight: theme.typography.weight.semibold,
+  },
+  missingText: {
+    marginTop: theme.spacing.sm,
+    color: theme.colors.textMuted,
+    fontSize: theme.typography.size.sm,
+    textAlign: 'center',
   },
 });

@@ -203,14 +203,14 @@ const styles = StyleSheet.create({
     marginTop: -36,
   },
   sideButton: {
-    width: 96,
-    height: 96,
+    width: 140,
+    height: 140,
     alignItems: 'center',
     justifyContent: 'center',
   },
   playButton: {
-    width: 110,
-    height: 110,
+    width: 130,
+    height: 130,
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: theme.spacing.xl,
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: theme.spacing.xl,
+    bottom: theme.spacing.xxl,
   },
   bottomCenter: {
     alignItems: 'center',

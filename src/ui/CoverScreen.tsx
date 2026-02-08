@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { MEMORIES } from '../data/memories';
 import { theme } from '../theme/theme';
 
 type CoverScreenProps = {
@@ -14,6 +15,7 @@ export default function CoverScreen({ onStart }: CoverScreenProps) {
   const { width, height } = Dimensions.get('window');
   const cardWidth = Math.min(width * 0.7, 760);
   const cardHeight = Math.min(height * 0.6, 420);
+  const hasMemories = MEMORIES.length > 0;
 
   return (
     <View style={styles.container}>
@@ -22,15 +24,24 @@ export default function CoverScreen({ onStart }: CoverScreenProps) {
           <Text style={styles.infoBubbleText}>i</Text>
         </View>
         <Text style={styles.title}>{TITLE_TEXT}</Text>
-        <Pressable
-          onPress={onStart}
-          style={styles.button}
-          accessibilityRole="button"
-          accessibilityLabel="Start slideshow"
-        >
-          <Text style={styles.buttonText}>Start</Text>
-        </Pressable>
-        <Text style={styles.hint}>{HINT_TEXT}</Text>
+        {hasMemories ? (
+          <Pressable
+            onPress={onStart}
+            style={styles.button}
+            accessibilityRole="button"
+            accessibilityLabel="Start slideshow"
+          >
+            <Text style={styles.buttonText}>Start</Text>
+          </Pressable>
+        ) : (
+          <View style={styles.placeholder}>
+            <Text style={styles.placeholderTitle}>No memories yet</Text>
+            <Text style={styles.placeholderText}>
+              Add photos to assets/photos and update MEMORIES to begin.
+            </Text>
+          </View>
+        )}
+        {hasMemories ? <Text style={styles.hint}>{HINT_TEXT}</Text> : null}
       </View>
     </View>
   );
@@ -89,6 +100,21 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: theme.typography.size.md,
     fontWeight: theme.typography.weight.semibold,
+  },
+  placeholder: {
+    marginTop: theme.spacing.xl,
+    alignItems: 'center',
+  },
+  placeholderTitle: {
+    color: theme.colors.text,
+    fontSize: theme.typography.size.md,
+    fontWeight: theme.typography.weight.semibold,
+  },
+  placeholderText: {
+    marginTop: theme.spacing.sm,
+    color: theme.colors.textMuted,
+    fontSize: theme.typography.size.sm,
+    textAlign: 'center',
   },
   hint: {
     marginTop: theme.spacing.md,

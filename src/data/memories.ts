@@ -1,6 +1,7 @@
 import type { MemoryItem } from '../slideshow/slideshowTypes';
 
 export const MEMORIES: MemoryItem[] = [
+  // Example chapters/groups. Only some photos need details.
   {
     type: 'chapter',
     id: 'chapter-1',
@@ -33,6 +34,7 @@ export const MEMORIES: MemoryItem[] = [
     date: '2024-04-10',
     details: 'The coffe shop!',
   },
+  // Next chapter with its own set of photos.
   {
     type: 'chapter',
     id: 'chapter-2',
