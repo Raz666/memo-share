@@ -18,7 +18,7 @@ export default function App() {
       ) : (
         <SlideshowScreen onExit={() => setScreen('cover')} />
       )}
-      <StatusBar style="light" backgroundColor={theme.colors.background} />
+      <StatusBar hidden />
     </View>
   );
 }

@@ -11,7 +11,11 @@ import InfoModal from './InfoModal';
 import HudOverlay from './HudOverlay';
 import SlideRenderer from './SlideRenderer';
 
-export default function SlideshowScreen() {
+type SlideshowScreenProps = {
+  onExit?: () => void;
+};
+
+export default function SlideshowScreen({ onExit }: SlideshowScreenProps) {
   const {
     currentChapterProgress,
     currentItem,
@@ -60,6 +64,12 @@ export default function SlideshowScreen() {
     setInfoVisible(true);
   };
 
+  const handleOpenCover = () => {
+    setInfoVisible(false);
+    setHudVisible(false);
+    onExit?.();
+  };
+
   const playHideRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevPausedRef = useRef(pausedByUser);
 
@@ -106,6 +116,7 @@ export default function SlideshowScreen() {
         onNext={next}
         onTogglePause={toggleUserPaused}
         onSpeedChange={setSpeedMode}
+        onOpenCover={onExit ? handleOpenCover : undefined}
         progress={currentChapterProgress}
       />
       <InfoBubble

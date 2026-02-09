@@ -21,6 +21,7 @@ type HudOverlayProps = {
   onNext: () => void;
   onTogglePause: () => void;
   onSpeedChange: (mode: SpeedMode) => void;
+  onOpenCover?: () => void;
   onSettings?: () => void;
   progress: {
     total: number;
@@ -51,6 +52,7 @@ export default function HudOverlay({
   onNext,
   onTogglePause,
   onSpeedChange,
+  onOpenCover,
   onSettings,
   progress,
 }: HudOverlayProps) {
@@ -106,6 +108,12 @@ export default function HudOverlay({
     onSpeedChange(mode);
     setMenuOpen(false);
     startTimer();
+  };
+
+  const handleOpenCover = () => {
+    if (!onOpenCover) return;
+    setMenuOpen(false);
+    onOpenCover();
   };
 
   const handleBackdropPress = () => {
@@ -170,6 +178,16 @@ export default function HudOverlay({
                 </Pressable>
               );
             })}
+            {onOpenCover ? <View style={styles.menuDivider} /> : null}
+            {onOpenCover ? (
+              <Pressable style={styles.menuItem} onPress={handleOpenCover}>
+                <View style={styles.menuRow}>
+                  <View style={styles.menuTextGroup}>
+                    <Text style={styles.menuTitle}>Open Cover</Text>
+                  </View>
+                </View>
+              </Pressable>
+            ) : null}
           </View>
         ) : null}
       </View>
@@ -286,5 +304,10 @@ const styles = StyleSheet.create({
     marginTop: 2,
     color: 'rgba(255, 255, 255, 0.6)',
     fontSize: theme.typography.size.xs,
+  },
+  menuDivider: {
+    height: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+    marginVertical: theme.spacing.sm,
   },
 });
